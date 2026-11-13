@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PiSouq - باي سوق</title>
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial}
+body{background:#F3F0FF}
+.phone{max-width:420px;margin:0 auto;background:#fff;min-height:100vh;position:relative;padding-bottom:80px}
+.header{background:#6A1B9A;color:#fff;padding:20px 16px 16px;border-radius:0 0 20px 20px}
+.top{display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:22px;font-weight:900}
+.logo span{background:#FFD700;color:#6A1B9A;padding:2px 8px;border-radius:50%;font-size:16px}
+.balance{background:rgba(255,255,255,.2);padding:6px 12px;border-radius:20px;font-size:13px;cursor:pointer}
+.search{margin-top:14px;background:#fff;border-radius:12px;padding:11px;display:flex;gap:8px;color:#888;font-size:14px}
+.search input{border:none;outline:none;width:100%;font-size:14px}
+.section{padding:16px}
+.section h3{font-size:17px;margin-bottom:12px}
+.cats{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
+.cat{min-width:70px;text-align:center;background:#F3F0FF;padding:10px 6px;border-radius:12px;cursor:pointer;border:2px solid transparent}
+.cat.active{background:#6A1B9A;color:#fff}
+.cat div{font-size:24px}
+.cat span{font-size:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.product{background:#fff;border:1px solid #eee;border-radius:14px;overflow:hidden;cursor:pointer}
+.product img{width:100%;height:130px;object-fit:cover}
+.product .info{padding:10px}
+.product .info b{font-size:13px;display:block;line-height:1.4}
+.product .info small{color:#888;font-size:11px}
+.price{color:#6A1B9A;font-weight:800;font-size:13px;margin-top:6px}
+.price small{color:#333;font-weight:600}
+.detail-img{width:100%;height:280px;object-fit:cover}
+.detail{padding:16px}
+.detail h2{font-size:20px}
+.rating{color:#FFB300;margin:6px 0;font-size:14px}
+.price-box{background:#F3F0FF;border-radius:14px;padding:14px;margin:14px 0;text-align:center}
+.price-box .big{font-size:24px;font-weight:900;color:#6A1B9A}
+.specs{display:flex;gap:8px;margin:12px 0}
+.spec{flex:1;text-align:center;background:#f5f5f5;padding:8px;border-radius:10px;font-size:12px}
+.btn{background:#6A1B9A;color:#fff;border:none;padding:15px;width:100%;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer}
+.btn-outline{background:#fff;color:#6A1B9A;border:2px solid #6A1B9A}
+.success{text-align:center;padding:30px 16px}
+.check{width:80px;height:80px;background:#00C853;color:#fff;border-radius:50%;font-size:40px;line-height:80px;margin:0 auto 14px}
+.escrow{background:#E8F5E9;border:1px solid #A5D6A7;border-radius:12px;padding:12px;margin:16px 0;text-align:right;font-size:13px}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:#fff;border-top:1px solid #eee;display:flex;padding:10px 0;z-index:99}
+.nav div{flex:1;text-align:center;font-size:11px;color:#888;cursor:pointer}
+.nav div.active{color:#6A1B9A;font-weight:700}
+.nav div i{font-size:20px;display:block}
+.hidden{display:none}
+.login-screen{text-align:center;padding:40px 20px;background:linear-gradient(180deg,#6A1B9A 0%,#8E24AA 60%,#fff 60%)}
+.login-card{background:#fff;border-radius:20px;padding:24px;margin-top:20px;box-shadow:0 10px 30px rgba(0,0,0,.15)}
+.pi-big{width:90px;height:90px;background:#6A1B9A;color:#FFD700;font-size:45px;font-weight:900;border-radius:50%;line-height:90px;margin:0 auto}
+.wallet-card{background:linear-gradient(135deg,#6A1B9A,#9C27B0);color:#fff;border-radius:18px;padding:18px;margin:16px}
+.wallet-card .bal{font-size:32px;font-weight:900}
+.order-card{background:#fff;border:1px solid #eee;border-radius:14px;padding:12px;margin-bottom:12px;display:flex;gap:12px}
+.order-card img{width:70px;height:70px;border-radius:10px;object-fit:cover}
+.badge{padding:3px 8px;border-radius:10px;font-size:11px;font-weight:700}
+.badge-shipping{background:#E3F2FD;color:#1976D2}
+.badge-delivered{background:#E8F5E9;color:#2E7D32}
+.badge-escrow{background:#FFF3E0;color:#EF6C00}
+</style>
+</head>
+<body>
+<div class="phone">
+<div id="screen-login">
+<div class="login-screen">
+<div style="color:#fff"><div class="pi-big">π</div><h1 style="margin-top:14px;font-size:28px">باي سوق PiSouq</h1><p style="opacity:.9;font-size:14px;margin-top:6px">اشتري من الصين وادفع بـ Pi<br>بدون دولار وبدون بنوك</p></div>
+<div class="login-card"><h3>أهلاً فيك في PiSouq 👋</h3><p style="color:#666;font-size:13px;margin:8px 0 16px;line-height:1.6">في اليمن ما نقدر نحول دولار للصين.<br>هنا تدفع بـ Pi اللي عدنته، ونحن نشتري لك من الصين.</p><button class="btn" onclick="loginWithPi()">💜 تسجيل الدخول بحساب Pi</button><p id="loginStatus" style="margin-top:10px;font-size:13px"></p><div style="margin-top:16px;background:#F3F0FF;padding:12px;border-radius:12px;font-size:12px;text-align:right;line-height:1.7">✅ <b>لماذا PiSouq؟</b><br>- ادفع بـ Pi مباشرة<br>- فلوسك محمية بنظام الضمان<br>- شحن من الصين لليمن 7-12 يوم<br>- عمولة 2% فقط</div><p style="font-size:11px;color:#999;margin-top:12px">بالضغط على الدخول أنت توافق على شروط Pi Network</p><button onclick="skipLogin()" style="background:none;border:none;color:#6A1B9A;font-weight:700;margin-top:8px;cursor:pointer">تخطي للتجربة →</button></div>
+</div>
+</div>
+<div id="screen-home" class="hidden">
+<div class="header"><div class="top"><div class="logo">باي سوق <span>π</span></div><div class="balance" onclick="showScreen('wallet')">💜 رصيدك: <b id="myBalance">2,450 Pi</b></div></div><div class="search">🔍 <input placeholder="ابحث عن منتجات من الصين..."></div><div style="margin-top:10px;font-size:12px">مرحباً <b id="userName">أبو خليل</b> 👋 • سعر Pi اليوم: <b id="piRateShow">0.075$</b></div></div>
+<div class="section"><h3>التصنيفات</h3><div class="cats"><div class="cat active" onclick="filterCat(this)"><div>📱</div><span>هواتف</span></div><div class="cat" onclick="filterCat(this)"><div>👕</div><span>ملابس</span></div><div class="cat" onclick="filterCat(this)"><div>🎧</div><span>إلكترونيات</span></div><div class="cat" onclick="filterCat(this)"><div>⌚</div><span>ساعات</span></div></div></div>
+<div class="section" style="padding-top:0"><h3>منتجات مميزة من الصين 🇨🇳</h3><div class="grid">
+<div class="product" onclick="openProduct('Redmi 13',100,'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400')"><img src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400"><div class="info"><b>هاتف شاومي Redmi 13</b><small>⭐ 4.8 • شحن من الصين</small><div class="price">1333 Pi <small>• 100 USD</small></div></div></div>
+<div class="product" onclick="openProduct('سماعات بلوتوث',25,'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400')"><img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400"><div class="info"><b>سماعات بلوتوث</b><small>⭐ 4.7 • شحن من الصين</small><div class="price">333 Pi <small>• 25 USD</small></div></div></div>
+<div class="product" onclick="openProduct('ساعة ذكية',40,'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400')"><img src="https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400"><div class="info"><b>ساعة ذكية رياضية</b><small>⭐ 4.6 • شحن من الصين</small><div class="price">533 Pi <small>• 40 USD</small></div></div></div>
+<div class="product" onclick="openProduct('قميص قطني',15,'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400')"><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400"><div class="info"><b>قميص قطني أسود</b><small>⭐ 4.9 • شحن من الصين</small><div class="price">200 Pi <small>• 15 USD</small></div></div></div>
+</div></div>
+</div>
+<div id="screen-detail" class="hidden"><img id="dImg" class="detail-img" src=""><div class="detail"><h2 id="dName">Redmi 13</h2><div class="rating">⭐⭐⭐⭐⭐ 4.8 (1.2k) • شحن من الصين</div><div class="price-box"><div style="font-size:13px;color:#666">السعر يشمل الشحن</div><div class="big"><span id="dPi">1333</span> Pi</div><div>= <span id="dUsd">100</span> USD</div></div><div class="specs"><div class="spec"><b>128GB</b><br>التخزين</div><div class="spec"><b>6GB</b><br>الرام</div><div class="spec"><b>أسود</b><br>اللون</div></div><div style="background:#FFF8E1;padding:10px;border-radius:10px;font-size:13px">🛡️ فلوسك محجوزة في الضمان لين تستلم</div><br><button class="btn" onclick="payNow()">ادفع <span id="btnPi">1333</span> Pi • Pi Network 💜</button><br><br><button class="btn btn-outline" onclick="showScreen('home')">⬅ رجوع</button><div id="payStatus" style="text-align:center;margin-top:10px;font-weight:bold"></div></div></div>
+<div id="screen-success" class="hidden"><div class="success"><div class="check">✓</div><h2>تم الدفع بنجاح!</h2><p style="color:#666">تم تأكيد الدفع عبر Pi Network</p><div style="background:#F3F0FF;padding:14px;border-radius:12px;margin-top:16px;text-align:right"><div>المنتج: <b id="sName">Redmi 13</b></div><div>المبلغ: <b id="sPi">1333 Pi</b></div><div>الطلب: <b>#PS1028471</b></div></div><div class="escrow">🛡️ <b>الحماية عبر الضمان:</b> أموالك محمية، سيتم تحرير الدفع للبائع بعد تأكيد الاستلام.</div><button class="btn" onclick="showScreen('wallet')">تتبع الطلب في محفظتي</button><br><br><button class="btn btn-outline" onclick="showScreen('home')">عودة للرئيسية</button></div></div>
+<div id="screen-wallet" class="hidden"><div class="header"><div class="top"><div class="logo">محفظتي 💜</div><div>👤 <span id="walletUser">أبو خليل</span></div></div></div><div class="wallet-card"><div style="font-size:13px;opacity:.9">رصيدك المتاح</div><div class="bal"><span id="walletBalance">2,450</span> π</div><div style="font-size:13px;opacity:.9">= <span id="walletUsd">183.75</span> USD • سعر Pi: 0.075$</div><div style="display:flex;gap:8px;margin-top:14px"><button style="flex:1;background:#fff;color:#6A1B9A;border:none;padding:10px;border-radius:10px;font-weight:700" onclick="showScreen('home')">🛒 تسوق الآن</button><button style="flex:1;background:rgba(255,255,255,.2);color:#fff;border:1px solid #fff;padding:10px;border-radius:10px;font-weight:700" onclick="alert('هذه ميزة الشحن قريباً')">+ اشحن Pi</button></div></div><div class="section" style="padding-bottom:0"><div style="display:flex;justify-content:space-between"><h3>💰 محجوز في الضمان</h3><b style="color:#EF6C00">1,333 Pi</b></div><p style="font-size:12px;color:#666">فلوسك المحجوزة ترجع لك لو ما وصلت البضاعة</p></div><div class="section"><h3>📦 طلباتي</h3><div class="order-card"><img src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=200"><div style="flex:1"><b>Redmi 13 - 128GB</b><br><small>#PS1028471 • 1333 Pi</small><br><span class="badge badge-shipping">🚢 في الشحن</span> <small>CN928374102</small><br><button onclick="confirmDelivery()" style="background:#00C853;color:#fff;border:none;padding:6px 12px;border-radius:8px;margin-top:6px;font-size:12px">✅ تأكيد الاستلام - فك الضمان</button></div></div><div class="order-card"><img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=200"><div style="flex:1"><b>سماعات بلوتوث</b><br><small>#PS1028300 • 333 Pi</small><br><span class="badge badge-delivered">✅ تم الاستلام</span><br><small style="color:#888">تم تحرير الضمان للبائع</small></div></div><div class="order-card"><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200"><div style="flex:1"><b>قميص قطني</b><br><small>#PS1028100 • 200 Pi</small><br><span class="badge badge-escrow">🛡️ في الضمان</span><br><small>بانتظار الشحن من الصين</small></div></div></div></div>
+</div>
+<div class="nav"><div class="active" onclick="showScreen('home')">🏠<br>الرئيسية</div><div>🗂️<br>التصنيفات</div><div>🛒<br>السلة</div><div onclick="showScreen('wallet')">📦<br>طلباتي</div><div onclick="showScreen('wallet')">👤<br>محفظتي</div></div>
+<script>
+let currentProduct={name:'Redmi 13',usd:100,pi:1333,img:''};
+let piRate=0.075; let userBalance=2450;
+function showScreen(name){['login','home','detail','success','wallet'].forEach(n=>document.getElementById('screen-'+n).classList.add('hidden'));document.getElementById('screen-'+name).classList.remove('hidden');window.scrollTo(0,0);}
+function filterCat(el){document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));el.classList.add('active');}
+function openProduct(name,usd,img){currentProduct={name,usd,pi:Math.round((usd/piRate)*1.02),img};document.getElementById('dName').innerText=name;document.getElementById('dImg').src=img;document.getElementById('dPi').innerText=currentProduct.pi;document.getElementById('dUsd').innerText=usd;document.getElementById('btnPi').innerText=currentProduct.pi;showScreen('detail');}
+function skipLogin(){showScreen('home');}
+async function loginWithPi(){document.getElementById('loginStatus').innerText="جاري فتح Pi...";try{Pi.init({version:"2.0",sandbox:true});const auth=await Pi.authenticate(['username','payments'],()=>{});document.getElementById('userName').innerText=auth.user.username;document.getElementById('walletUser').innerText=auth.user.username;showScreen('home');}catch(e){document.getElementById('loginStatus').innerText="للتجربة اضغط تخطي - أو افتح التطبيق داخل Pi Browser";}}
+async function payNow(){document.getElementById('payStatus').innerText="جاري فتح محفظة Pi...";setTimeout(()=>{userBalance-=currentProduct.pi;document.getElementById('myBalance').innerText=userBalance.toLocaleString()+" Pi";document.getElementById('walletBalance').innerText=userBalance.toLocaleString();document.getElementById('walletUsd').innerText=(userBalance*piRate).toFixed(2);document.getElementById('sName').innerText=currentProduct.name;document.getElementById('sPi').innerText=currentProduct.pi+" Pi";showScreen('success');},800);}
+function confirmDelivery(){alert("✅ تم تأكيد الاستلام! تم فك الضمان وتحويل 1333 Pi للبائع الصيني. شكراً لاستخدامك PiSouq");}
+async function updateRate(){try{const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=pi-network&vs_currencies=usd');const d=await r.json();piRate=d['pi-network'].usd;document.getElementById('piRateShow').innerText=piRate+"$";}catch(e){}}
+updateRate();
+</script>
+</body>
+</html>

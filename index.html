@@ -17,7 +17,7 @@ body{background:#F3F0FF}
 .search{margin-top:14px;background:#fff;border-radius:12px;padding:10px;display:flex;gap:8px}
 .search input{border:none;outline:none;width:100%;font-size:15px}
 .cats{display:flex;gap:8px;padding:14px 16px;overflow-x:auto}
-.cats div{background:#F3F0FF;padding:8px 14px;border-radius:20px;white-space:nowrap;font-size:13px;font-weight:700}
+.cats div{background:#F3F0FF;padding:8px 14px;border-radius:20px;white-space:nowrap;font-size:13px;font-weight:700;cursor:pointer}
 .cats div.active{background:#6A1B9A;color:#fff}
 .section{padding:0 16px}
 h3{margin:10px 0}
@@ -30,28 +30,58 @@ h3{margin:10px 0}
 .card-body button{width:100%;background:#6A1B9A;color:#fff;border:none;padding:8px;border-radius:8px;font-weight:700}
 .bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:#fff;display:flex;justify-content:space-around;padding:12px;border-top:1px solid #eee}
 .bottom button{background:#FFD700;border:none;padding:10px 20px;border-radius:20px;font-weight:900}
+.empty{display:none;text-align:center;padding:30px;color:#888}
 </style>
 </head>
 <body>
 <div class="phone">
 <div class="header">
 <div class="top"><div class="logo">Pi<span>Souq</span></div><div class="balance">⭐ 0.00 Pi</div></div>
-<div class="search"><span>🔍</span><input placeholder="ابحث في سوق باي..."></div>
+<div class="search"><span>🔍</span><input id="searchInput" oninput="doSearch()" placeholder="ابحث في سوق باي..."></div>
 </div>
-<div class="cats"><div class="active">الكل</div><div>جوالات</div><div>ملابس</div><div>عقارات</div><div>سيارات</div></div>
-<div class="section"><h3>منتجات مميزة 🔥</h3><div class="grid">
-<div class="card"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"><div class="card-body"><b>ايفون 15 برو</b><div class="price">120 Pi</div><button onclick="buy('ايفون 15 برو',120)">اشتري بـ Pi</button></div></div>
-<div class="card"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"><div class="card-body"><b>ساعة ذكية</b><div class="price">15 Pi</div><button onclick="buy('ساعة ذكية',15)">اشتري بـ Pi</button></div></div>
-<div class="card"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"><div class="card-body"><b>حذاء نايك</b><div class="price">8 Pi</div><button onclick="buy('حذاء نايك',8)">اشتري بـ Pi</button></div></div>
-<div class="card"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400"><div class="card-body"><b>سماعة بلوتوث</b><div class="price">5 Pi</div><button onclick="buy('سماعة بلوتوث',5)">اشتري بـ Pi</button></div></div>
+<div class="cats" id="cats">
+<div class="active" onclick="filterCat('all',this)">الكل</div>
+<div onclick="filterCat('جوالات',this)">جوالات</div>
+<div onclick="filterCat('ملابس',this)">ملابس</div>
+<div onclick="filterCat('عقارات',this)">عقارات</div>
+<div onclick="filterCat('سيارات',this)">سيارات</div>
+</div>
+<div class="section"><h3 id="title">منتجات مميزة 🔥</h3><div class="grid" id="grid">
+<div class="card" data-cat="جوالات"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"><div class="card-body"><b>ايفون 15 برو</b><div class="price">120 Pi</div><button onclick="buy('ايفون 15 برو',120)">اشتري بـ Pi</button></div></div>
+<div class="card" data-cat="جوالات"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"><div class="card-body"><b>ساعة ذكية</b><div class="price">15 Pi</div><button onclick="buy('ساعة ذكية',15)">اشتري بـ Pi</button></div></div>
+<div class="card" data-cat="ملابس"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"><div class="card-body"><b>حذاء نايك</b><div class="price">8 Pi</div><button onclick="buy('حذاء نايك',8)">اشتري بـ Pi</button></div></div>
+<div class="card" data-cat="جوالات"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400"><div class="card-body"><b>سماعة بلوتوث</b><div class="price">5 Pi</div><button onclick="buy('سماعة بلوتوث',5)">اشتري بـ Pi</button></div></div>
+<div class="card" data-cat="سيارات"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400"><div class="card-body"><b>سيارة سبورت</b><div class="price">5000 Pi</div><button onclick="buy('سيارة سبورت',5000)">اشتري بـ Pi</button></div></div>
+<div class="card" data-cat="عقارات"><img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400"><div class="card-body"><b>شقة فاخرة</b><div class="price">20000 Pi</div><button onclick="buy('شقة فاخرة',20000)">اشتري بـ Pi</button></div></div>
+</div>
+<div class="empty" id="empty">لا يوجد منتجات في هذا القسم حاليا</div>
 </div></div>
-</div>
 <div class="bottom"><span>🏠 الرئيسية</span><button onclick="login()">دخول بـ Pi</button><span>🛒 سلة</span></div>
 <script>
 const Pi = window.Pi;
 if(Pi){ Pi.init({version:"2.0", sandbox:true}); }
 function login(){ if(!Pi){ alert("افتح التطبيق من Pi Browser"); return; } Pi.authenticate(['username','payments'], function(auth){ alert("أهلا " + auth.user.username); }); }
 function buy(name, price){ if(!Pi){ alert("افتح من Pi Browser للدفع"); return; } Pi.createPayment({amount: price, memo: name, metadata:{product:name}}, { onReadyForServerApproval:function(id){ alert("تم إنشاء الدفع: " + name); }, onReadyForServerCompletion:function(id,tx){ alert("تم الدفع بنجاح ✅"); }, onCancel:function(id){}, onError:function(e){ alert("خطأ في الدفع"); } }); }
+let currentCat = 'all';
+function filterCat(cat, el){
+  currentCat = cat;
+  document.querySelectorAll('#cats div').forEach(d=>d.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('title').innerText = cat === 'all' ? 'منتجات مميزة 🔥' : cat;
+  applyFilter();
+}
+function doSearch(){ applyFilter(); }
+function applyFilter(){
+  let q = document.getElementById('searchInput').value.trim();
+  let cards = document.querySelectorAll('.card');
+  let shown = 0;
+  cards.forEach(c=>{
+    let matchCat = currentCat === 'all' || c.getAttribute('data-cat') === currentCat;
+    let matchSearch = q === '' || c.innerText.includes(q);
+    if(matchCat && matchSearch){ c.style.display='block'; shown++; } else { c.style.display='none'; }
+  });
+  document.getElementById('empty').style.display = shown===0 ? 'block' : 'none';
+}
 </script>
 </body>
 </html>

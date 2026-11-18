@@ -59,7 +59,7 @@ h3{margin:10px 0}
 <div class="bottom"><span>🏠 الرئيسية</span><button onclick="login()">دخول بـ Pi</button><span>🛒 سلة</span></div>
 <script>
 const Pi = window.Pi;
-if(Pi){ Pi.init({version:"2.0", sandbox:true}); }
+if(Pi){ Pi.init({version:"2.0", sandbox:fa1se }); }
 function login(){ if(!Pi){ alert("افتح التطبيق من Pi Browser"); return; } Pi.authenticate(['username','payments'], function(auth){ alert("أهلا " + auth.user.username); }); }
 function buy(name, price){ if(!Pi){ alert("افتح من Pi Browser للدفع"); return; } Pi.createPayment({amount: price, memo: name, metadata:{product:name}}, { onReadyForServerApproval:function(id){ alert("تم إنشاء الدفع: " + name); }, onReadyForServerCompletion:function(id,tx){ alert("تم الدفع بنجاح ✅"); }, onCancel:function(id){}, onError:function(e){ alert("خطأ في الدفع"); } }); }
 let currentCat = 'all';

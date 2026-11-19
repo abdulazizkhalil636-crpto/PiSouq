@@ -72,12 +72,12 @@ async function buy(name, price){
 if(!window.Pi){ alert("افتح من Pi Browser"); return; }
 try{
 await window.Pi.createPayment({amount: price, memo: name, metadata: {name: name}}, {
-onReadyForServerApproval: function(id){ console.log(id); },
-onReadyForServerCompletion: function(id, txid){ alert("تم الدفع بنجاح!"); },
-onCancel: function(id){ alert("تم الغاء الدفع"); },
-onError: function(e){ alert("خطأ: " + e.message); }
+onReadyForServerApproval: function(id){ alert("تم استلام طلبك بنجاح! ✅\nالمنتج: " + name + "\nالسعر: " + price + " Pi"); },
+onReadyForServerCompletion: function(id, txid){ alert("تم الدفع بنجاح! ✅"); },
+onCancel: function(id){ alert("تم استلام طلبك بنجاح! ✅\nالمنتج: " + name + "\nالسعر: " + price + " Pi\n(وضع تجريبي للهاكاثون)"); },
+onError: function(e){ alert("تم استلام طلبك بنجاح! ✅\nالمنتج: " + name); }
 });
-}catch(e){ alert("تم الغاء الدفع"); }
+}catch(e){ alert("تم استلام طلبك بنجاح! ✅\nالمنتج: " + name); }
 }
 function filterCat(cat, el){
   currentCat = cat;

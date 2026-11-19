@@ -71,10 +71,14 @@ alert("اهلا " + auth.user.username);
 async function buy(name, price){
 if(!window.Pi){ alert("افتح من Pi Browser"); return; }
 try{
-await window.Pi.createPayment({amount: price, memo: "شراء " + name, metadata: {item: name}}, onIncompletePayment);
-alert("تم الدفع");
+await window.Pi.createPayment({amount: price, memo: name, metadata: {name: name}}, {
+onReadyForServerApproval: function(id){ console.log(id); },
+onReadyForServerCompletion: function(id, txid){ alert("تم الدفع بنجاح!"); },
+onCancel: function(id){ alert("تم الغاء الدفع"); },
+onError: function(e){ alert("خطأ: " + e.message); }
+});
 }catch(e){ alert("تم الغاء الدفع"); }
-}let currentCat = 'all';
+}
 function filterCat(cat, el){
   currentCat = cat;
   document.querySelectorAll('#cats div').forEach(d=>d.classList.remove('active'));
